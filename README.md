@@ -18,3 +18,22 @@ Before running apkdissect on a new system, some changes should be made to `apkdi
  * `MEDIA_ROOT` should be set to the location of the `apkdissect/mediaroot` directory.
  * `SECRET_KEY` should be given a new random value
 
+On first use run `./manage,py syncdb` to create the database.
+
+Importing APKs
+==============
+
+Connect a Android device to the computer and make sure `adb` can connect to it.
+Run `./manage.py apkimport` to import all installed apk files from the connected device.
+
+All apks will be deduplicated to save storage space and to improve import and analysis speed.
+Each import will be given a unique importbatch that specifies the device identifier, import timestamp
+and all apks that are installed on the device at that time.
+
+Bugs
+====
+
+ * In general: This tool is not even close to being finished
+ * Decompilation is broken and only stores class prototypes
+
+
