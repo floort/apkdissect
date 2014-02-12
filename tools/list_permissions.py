@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-from optparse import OptionParser
-from pprint import pprint
-import os
 
 try:
 	from androguard.core import *
