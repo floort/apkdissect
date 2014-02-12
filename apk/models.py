@@ -3,7 +3,7 @@ from django.conf import settings
 
 import os
 
-from analyze import get_classes, get_permissions
+from analyze import get_all_classes, get_permissions
 
 # Create your models here.
 
@@ -47,7 +47,7 @@ class APK(models.Model):
     def _load_classes(self):
         for c in DalvikClass.objects.filter(apk=self):
             c.delete()
-        for name, source in get_classes(os.path.join(settings.MEDIA_ROOT, self.apk.name)):
+        for name, source in get_all_classes(os.path.join(settings.MEDIA_ROOT, self.apk.name)):
             dalvikclass = DalvikClass(name=name)
             dalvikclass.javasource = source
             dalvikclass.apk = self
