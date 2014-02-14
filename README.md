@@ -18,7 +18,7 @@ Before running apkdissect on a new system, some changes should be made to `apkdi
  * `MEDIA_ROOT` should be set to the location of the `apkdissect/mediaroot` directory.
  * `SECRET_KEY` should be given a new random value
 
-On first use run `./manage,py syncdb` to create the database.
+On first use run `./manage.py syncdb` to create the database.
 
 Importing APKs
 ==============
@@ -34,6 +34,5 @@ Bugs
 ====
 
  * In general: This tool is not even close to being finished
- * Decompilation is broken and only stores class prototypes
 
 
