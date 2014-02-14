@@ -30,6 +30,13 @@ All apks will be deduplicated to save storage space and to improve import and an
 Each import will be given a unique importbatch that specifies the device identifier, import timestamp
 and all apks that are installed on the device at that time.
 
+Admin interface
+===============
+
+Imported apks can be explored through the Django admin interface in a webbrowser.
+The webserver can be started with `./manage.py runserver` and the data can be 
+explored by pointing your webbrowser to `http://localhost:8000/admin/`.
+
 Bugs
 ====
 
