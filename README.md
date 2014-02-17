@@ -11,6 +11,7 @@ Dependencies:
  * `adb` in your `$PATH`
  * `androguard`
  * `django`
+ * `pygments`
 	
 Before running apkdissect on a new system, some changes should be made to `apkdissect/settings.py`:
  * `ADMINS` should be set to your name and email
