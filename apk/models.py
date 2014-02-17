@@ -3,6 +3,10 @@ from django.conf import settings
 
 import os
 
+from pygments import highlight
+from pygments.lexers import JavaLexer
+from pygments.formatters import HtmlFormatter
+
 from analyze import get_classes, get_permissions
 
 # Create your models here.
@@ -25,6 +29,13 @@ class DalvikClass(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    def source_link(self):
+    	return u'<a href="/showclass/%d">Source</a>' % (self.id)
+    source_link.allow_tags = True
+    
+    def java_html(self):
+    	return highlight(self.javasource, JavaLexer(), HtmlFormatter())
 
 
 class APK(models.Model):
