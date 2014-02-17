@@ -76,17 +76,28 @@ class Device(models.Model):
         return self.identifier
 
 class ImportBatch(models.Model):
-    device = models.ForeignKey(Device)
-    timestamp = models.DateTimeField(auto_now=True)
-    
-    def __unicode__(self):
-        return u'%s @ %s' % (self.device, self.timestamp)
+	device = models.ForeignKey(Device)
+	timestamp = models.DateTimeField(auto_now=True)
+	
+	def __unicode__(self):
+		return u'%s @ %s' % (self.device, self.timestamp)
+	
+	def admin_apps_link(self):
+		return u'<a href="/admin/apk/app/?batch__id__exact=%d">Show apps</a>' % (self.id)
+	admin_apps_link.allow_tags = True
 
 class App(models.Model):
-    name = models.CharField(max_length=256)
-    location = models.CharField(max_length=256)
-    apk = models.ForeignKey(APK)
-    batch = models.ForeignKey(ImportBatch)
-    
-    def __unicode__(self):
-        return self.name
+	name = models.CharField(max_length=256)
+	location = models.CharField(max_length=256)
+	apk = models.ForeignKey(APK)
+	batch = models.ForeignKey(ImportBatch)
+	
+	def __unicode__(self):
+		return self.name
+	
+	def admin_source_link(self):
+		return u'<a href="/admin/apk/dalvikclass/?apk__id__exact=%d">Show source</a>' % (self.id)
+	admin_source_link.allow_tags = True
+		
+		
+		
