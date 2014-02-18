@@ -7,7 +7,7 @@ class AppAdmin(admin.ModelAdmin):
 
 class APKAdmin(admin.ModelAdmin):
     list_display = ['sha256', 'apk', 'permissions_loaded', 'decompiled']
-    list_filter = ['permissions']
+    list_filter = ['decompiled', 'permissions']
     search_fields = ['sha256', 'md5', 'apk']
 
 class ImportBatchAdmin(admin.ModelAdmin):
