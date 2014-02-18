@@ -55,12 +55,6 @@ class Command(BaseCommand):
                 with open(tmpfile) as f:
                     djfile = File(f)
                     apk.apk.save(p[2]+'.apk', djfile)
-                fastprint("Reading permissions...")
-                apk._load_permissions()
-                print "Done"
-                fastprint("Decompiling...")
-                apk._load_classes()
-                print "done"
                 apk.save()
                 app = App(name = p[2], location = p[1], apk = apk, batch = importbatch)
                 app.save()
