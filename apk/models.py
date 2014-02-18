@@ -43,6 +43,8 @@ class APK(models.Model):
     sha256 = models.CharField(max_length=64, db_index=True)
     md5 = models.CharField(max_length=32, db_index=True)
     permissions = models.ManyToManyField(Permission)
+    permissions_loaded = models.BooleanField(default=False)
+    decompiled = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.sha256
