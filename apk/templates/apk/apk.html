@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Apk: {{apk.sha256}}</title>
+	</head>
+	<body>
+		<table width="100%"">
+			<tr width="100%">
+				<td>
+					<h3>Permissions</h3>
+					<ul>
+					{% for p in apk.permissions.all %}
+						<li>{{p.name}}</li>
+					{% endfor %}
+					</ul>
+				</td>
+				<td rowspan="2" width="100%">
+					<iframe id="source" src="" width="100%" height="100%">
+					</iframe>
+				<td>
+			</tr>
+			<tr>
+				<td>
+					<h3>Classes</h3>
+					<ul>
+					{% for c in apk.dalvikclass_set.all %}
+						<li><a href="/showclass/{{c.pk}}" target="source">{{c.name}}</a></li>
+					{% endfor %}
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

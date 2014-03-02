@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.3.min.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://w2ui.com/src/w2ui-1.3.min.js"></script>
+</head>
+<body style="margin: 0px;">
+    <div id="layout" style="width: 100%; height: 900px;"></div>
+</body>
+<script>
+$('#layout').w2layout({
+    name: 'layout',
+    panels: [
+    	{ type: 'top', size: 30, style: 'background-color: #F5F6F7;'},
+        { type: 'left', size: 300, resizable: true, style: 'background-color: #F5F6F7;'},
+        { type: 'main', style: 'background-color: #F5F6F7; padding: 5px;' }
+    ]
+});
+
+// Load top
+$.getJSON("http://localhost:8000/apk/menu.json", function(data) {
+	data.items.push({type:'break', id:'menubreak'});
+	data.items.push({type:'html', id:'menutile', html:'{{apk.apk.name}}'});
+	w2ui['layout'].content('top', $().w2toolbar(data));
+});
+
+
+// Load left
+$.getJSON("http://localhost:8000/apk/{{apk.pk}}/classes_menu.json", function(data) {
+	
+  	var mysidebar = {name: 'sidebar', img: null, nodes: [
+		{ id: 'apk-properties', text: 'Properties', img: 'icon-folder', expanded: false, group: true, nodes: []},
+		{ id: 'apk-files', text: 'Files', img: 'icon-folder', expanded: true, group: true, nodes: []},
+		{ id: 'apk-classes', text: 'Classes', img: 'icon-folder', expanded: true, group: true, nodes: data}
+	], 
+	onClick: function (event) {
+		if (event.target.indexOf("class_") == 0) {
+			w2ui['layout'].load('main', '/showclass/'+event.target.slice(6));
+		}
+	}};
+  	w2ui['layout'].content('left', $().w2sidebar(mysidebar));
+});
+
+
+</script>
+</html>

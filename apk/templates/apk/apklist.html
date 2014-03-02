@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Apk list</title>
+	</head>
+	<body>
+		<ul>
+			{% for app in apps %}
+			<li><a href="/showapk/{{app.apk.pk}}">{{app.name}}</a></li>
+			{% endfor %}
+		</ul>
+	</body>
+</html>
