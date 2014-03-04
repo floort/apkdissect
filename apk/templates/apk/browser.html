@@ -21,7 +21,7 @@ $('#layout').w2layout({
 // Load top
 $.getJSON("http://localhost:8000/apk/menu.json", function(data) {
 	data.items.push({type:'break', id:'menubreak'});
-	data.items.push({type:'html', id:'menutile', html:'{{apk.apk.name}}'});
+	data.items.push({type:'html', id:'menutile', html:'{{apk.name}}'});
 	w2ui['layout'].content('top', $().w2toolbar(data));
 });
 

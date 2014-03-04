@@ -30,7 +30,7 @@ def menu_json(request):
 				"caption": "Open APK",
 				"img": "icon-edit",
 				"items": [{
-					"text": '<a href="/dissect/%d">%s</a>' % (apk.pk, apk.apk.name),
+					"text": '<a href="/dissect/%d">%s</a>' % (apk.pk, apk.name),
 					"img": "icon-page"
 				} for apk in APK.objects.all()]
 			}

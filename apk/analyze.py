@@ -48,3 +48,8 @@ def get_all_classes(filename):
 def get_permissions(filename):
     a = apk.APK(filename)
     return  a.get_permissions()
+    
+    
+def get_name(filename):
+	a = apk.APK(filename)
+	return a.package

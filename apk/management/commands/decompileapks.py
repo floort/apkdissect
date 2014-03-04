@@ -7,7 +7,7 @@ class Command(BaseCommand):
 	help = 'Decompile apks in the database'
 	
 	def handle(self, *args, **options):
-		for apk in APK.objects.all():
+		for apk in APK.objects.filter(decompiled=False):
 			print apk.apk
 			try:
 				# clean all classes that should not be there

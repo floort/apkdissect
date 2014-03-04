@@ -6,9 +6,9 @@ class AppAdmin(admin.ModelAdmin):
 	list_filter = ['batch']
 
 class APKAdmin(admin.ModelAdmin):
-    list_display = ['sha256', 'apk', 'permissions_loaded', 'decompiled']
+    list_display = ['name', 'sha256', 'permissions_loaded', 'decompiled']
     list_filter = ['decompiled', 'permissions']
-    search_fields = ['sha256', 'md5', 'apk']
+    search_fields = ['name', 'sha256', 'md5', 'apk']
 
 class ImportBatchAdmin(admin.ModelAdmin):
 	list_display = ['device', 'timestamp', 'admin_apps_link']

@@ -7,7 +7,7 @@ from pygments import highlight
 from pygments.lexers import JavaLexer
 from pygments.formatters import HtmlFormatter
 
-from analyze import get_classes, get_permissions
+from analyze import get_classes, get_permissions, get_name
 
 # Create your models here.
 
@@ -42,6 +42,7 @@ class APK(models.Model):
     apk = models.FileField(upload_to="apks/")
     sha256 = models.CharField(max_length=64, db_index=True)
     md5 = models.CharField(max_length=32, db_index=True)
+    name = models.CharField(max_length=256, null=True)
     permissions = models.ManyToManyField(Permission)
     permissions_loaded = models.BooleanField(default=False)
     decompiled = models.BooleanField(default=False)
@@ -65,6 +66,10 @@ class APK(models.Model):
             dalvikclass.javasource = source
             dalvikclass.apk = self
             dalvikclass.save()
+        self.save()
+ 	
+    def _load_name(self):
+        self.name = get_name(os.path.join(settings.MEDIA_ROOT, self.apk.name))
         self.save()
         
         
@@ -100,6 +105,13 @@ class App(models.Model):
 	def admin_source_link(self):
 		return u'<a href="/admin/apk/dalvikclass/?apk__id__exact=%d">Show source</a>' % (self.id)
 	admin_source_link.allow_tags = True
+	
+class File(models.Model):
+	sha256 = models.CharField(max_length=64, db_index=True)
+	apk = models.FileField(upload_to="apks/")
+	
+	def __unicode__(self):
+		return u'File:%s' % (self.sha256)
 		
 		
 		
