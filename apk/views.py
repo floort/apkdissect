@@ -2,6 +2,8 @@
 
 import json
 from pprint import pprint
+from io import BytesIO
+import zipfile
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -78,6 +80,18 @@ def classes_menu_json(request, apk_id):
 	for c in DalvikClass.objects.filter(apk=apk):
 		tree = classes_to_tree(tree, c.name.split("/"), c.pk)
 	return HttpResponse(json.dumps(tree_to_menu(tree)), content_type="application/json")
+	
+def classes_zip(request, apk_id):
+	apk = get_object_or_404(APK, pk=apk_id)
+	output = BytesIO()
+	with zipfile.ZipFile(output, 'w') as myzip:
+		for c in DalvikClass.objects.filter(apk=apk):
+			myzip.writestr(c.name+".java", bytes(c.javasource))
+		myzip.close()
+	print dir(output)
+	response = HttpResponse(output.getvalue(), mimetype="application/zip")
+	response['Content-Disposition'] = "attachment;filename=%d_source.zip" % (apk.pk, )
+	return response
 	
 def dissect(request, apk_id):
 	apk = get_object_or_404(APK, pk=apk_id)
