@@ -1,7 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.core.files.base import ContentFile
 
 import os
+from hashlib import md5, sha256
 
 from pygments import highlight
 from pygments.lexers import JavaLexer
@@ -37,6 +39,27 @@ class DalvikClass(models.Model):
     def java_html(self):
     	return highlight(self.javasource, JavaLexer(), HtmlFormatter())
 
+    def source_apk_name(self):
+        return self.apk.name
+
+
+def create_APK_from_file(filename):
+    with open(filename) as f:
+        md5sum = md5(f.read()).hexdigest()
+        f.seek(0,0)
+        sha256sum = sha256(f.read()).hexdigest()
+        apk, created = APK.objects.get_or_create(md5=md5sum, sha256=sha256sum)
+        if not created:
+            print "Skiped duplicate"
+            return apk
+        f.seek(0,0)
+        apk.apk.save(os.path.basename(filename), ContentFile(f.read()))
+        apk.save()
+    apk._load_name()
+    #apk._load_permissions()
+    #apk._load_classes()
+    return apk
+
 
 class APK(models.Model):
     apk = models.FileField(upload_to="apks/")
@@ -49,13 +72,14 @@ class APK(models.Model):
     
     def __unicode__(self):
         return self.sha256
-        
+
     def _load_permissions(self):
         self.permissions.clear()
         for p in get_permissions(os.path.join(settings.MEDIA_ROOT, self.apk.name)):
             perm, created = Permission.objects.get_or_create(name=p)
             if created: perm.save()
             self.permissions.add(perm)
+        self.permissions_loaded = True
         self.save()
     
     def _load_classes(self):
@@ -66,6 +90,7 @@ class APK(models.Model):
             dalvikclass.javasource = source
             dalvikclass.apk = self
             dalvikclass.save()
+        self.decompiled = True
         self.save()
  	
     def _load_name(self):

@@ -86,11 +86,11 @@ def classes_zip(request, apk_id):
 	output = BytesIO()
 	with zipfile.ZipFile(output, 'w') as myzip:
 		for c in DalvikClass.objects.filter(apk=apk):
-			myzip.writestr(c.name+".java", bytes(c.javasource))
+                    myzip.writestr(c.name[:-1]+".java", bytes(c.javasource))
 		myzip.close()
 	print dir(output)
-	response = HttpResponse(output.getvalue(), mimetype="application/zip")
-	response['Content-Disposition'] = "attachment;filename=%d_source.zip" % (apk.pk, )
+	response = HttpResponse(output.getvalue(), content_type="application/zip")
+	response['Content-Disposition'] = "attachment;filename=%d-%s-source.zip" % (apk.pk, apk.name)
 	return response
 	
 def dissect(request, apk_id):

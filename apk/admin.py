@@ -16,7 +16,7 @@ class ImportBatchAdmin(admin.ModelAdmin):
 	list_filter = ['device']
 
 class DalvikClassAdmin(admin.ModelAdmin):
-	list_display = ['name', 'source_link']
+	list_display = ['name', 'source_apk_name', 'source_link']
 	list_filter = ['apk']
 	search_fields = ['name', 'javasource']
 

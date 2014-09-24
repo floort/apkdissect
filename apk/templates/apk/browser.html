@@ -22,6 +22,8 @@ $('#layout').w2layout({
 $.getJSON("http://localhost:8000/apk/menu.json", function(data) {
 	data.items.push({type:'break', id:'menubreak'});
 	data.items.push({type:'html', id:'menutile', html:'{{apk.name}}'});
+	data.items.push({type:'break', id:'menubreak'});
+	data.items.push({type:'html', id:'downloadsource', html:'<a href="/apk/{{apk.id}}/source.zip">Download source</a>'});
 	w2ui['layout'].content('top', $().w2toolbar(data));
 });
 

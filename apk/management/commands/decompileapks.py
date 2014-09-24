@@ -7,13 +7,15 @@ class Command(BaseCommand):
 	help = 'Decompile apks in the database'
 	
 	def handle(self, *args, **options):
-		for apk in APK.objects.filter(decompiled=False):
+		for apk in APK.objects.filter(decompiled=False).order_by('-id'):
 			print apk.apk
 			try:
 				# clean all classes that should not be there
 				DalvikClass.objects.filter(apk=apk).delete()
 				# Start decompilation
-				apk._load_classes()
+				apk._load_permissions()
+                                apk.permissions_loaded = True
+                                apk._load_classes()
 				apk.decompiled = True
 			except:
 				apk.decompiled = False
