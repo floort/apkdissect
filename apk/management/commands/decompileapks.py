@@ -15,8 +15,10 @@ class Command(BaseCommand):
 				# Start decompilation
 				apk._load_permissions()
                                 apk.permissions_loaded = True
+                                apk.save()
                                 apk._load_classes()
 				apk.decompiled = True
+                                apk.save()
 			except:
 				apk.decompiled = False
 				print "\tFailed!"

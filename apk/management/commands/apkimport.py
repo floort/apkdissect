@@ -39,6 +39,14 @@ class Command(BaseCommand):
 		importbatch.save()
 		self.stdout.write('Importing from "%s"' % device)
 		for p in list_packages(deviceid):
+			out = check_output([ADB, 'shell', 'md5', p[1]])
+			md5sum = out.split()[0].strip()
+			if len(md5sum) != 32:
+				print "Could not read", p[2]
+				continue
+			if len(APK.objects.filter(md5=md5sum).all()) > 0:
+				print "Skipping duplicate", p[2]
+				continue
 			tmpfile = os.path.join('/tmp/', p[2])
 			print p[2]
 			out = check_output([ADB, '-s', deviceid, 'pull', p[1], tmpfile])

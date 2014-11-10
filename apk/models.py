@@ -55,9 +55,12 @@ def create_APK_from_file(filename):
         f.seek(0,0)
         apk.apk.save(os.path.basename(filename), ContentFile(f.read()))
         apk.save()
-    apk._load_name()
-    #apk._load_permissions()
-    #apk._load_classes()
+    try:
+        apk._load_name()
+        apk._load_permissions()
+        apk._load_classes()
+    except:
+        pass
     return apk
 
 
