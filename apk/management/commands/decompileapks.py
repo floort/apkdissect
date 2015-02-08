@@ -13,12 +13,13 @@ class Command(BaseCommand):
 				# clean all classes that should not be there
 				DalvikClass.objects.filter(apk=apk).delete()
 				# Start decompilation
+				apk._load_name()
 				apk._load_permissions()
-                                apk.permissions_loaded = True
-                                apk.save()
-                                apk._load_classes()
+				apk.permissions_loaded = True
+				apk.save()
+				apk._load_classes()
 				apk.decompiled = True
-                                apk.save()
+				apk.save()
 			except:
 				apk.decompiled = False
 				print "\tFailed!"

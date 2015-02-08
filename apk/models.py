@@ -43,7 +43,7 @@ class DalvikClass(models.Model):
         return self.apk.name
 
 
-def create_APK_from_file(filename):
+def create_APK_from_file(filename, decompile=True):
     with open(filename) as f:
         md5sum = md5(f.read()).hexdigest()
         f.seek(0,0)
@@ -55,12 +55,13 @@ def create_APK_from_file(filename):
         f.seek(0,0)
         apk.apk.save(os.path.basename(filename), ContentFile(f.read()))
         apk.save()
-    try:
-        apk._load_name()
-        apk._load_permissions()
-        apk._load_classes()
-    except:
-        pass
+    if decompile:
+	try:
+        	apk._load_name()
+        	apk._load_permissions()
+        	apk._load_classes()
+    	except:
+        	pass
     return apk
 
 
@@ -72,6 +73,7 @@ class APK(models.Model):
     permissions = models.ManyToManyField(Permission)
     permissions_loaded = models.BooleanField(default=False)
     decompiled = models.BooleanField(default=False)
+    bug_tags = models.ManyToManyField('BugTag')
     
     def __unicode__(self):
         return self.sha256
@@ -99,6 +101,17 @@ class APK(models.Model):
     def _load_name(self):
         self.name = get_name(os.path.join(settings.MEDIA_ROOT, self.apk.name))
         self.save()
+    
+    def _classify_bugs(self):
+        # ALLOW_ALL_HOSTNAME_VERIFIER
+        tag, created = BugTag.objects.get_or_create(name="ALLOW_ALL_HOSTNAME_VERIFIER", defaults={
+            "description": "Disabled certificate checks"
+        })
+        print tag, created
+        if len(self.dalvikclass_set.filter(javasource__contains='ALLOW_ALL_HOSTNAME_VERIFIER')) > 0:
+            self.bug_tags.add(tag)
+    def num_bug_tags(self):
+        return len(self.bug_tags.all())
         
         
         
@@ -140,6 +153,12 @@ class File(models.Model):
 	
 	def __unicode__(self):
 		return u'File:%s' % (self.sha256)
-		
+
+class BugTag(models.Model):
+    name = models.CharField(max_length=64)
+    description = models.TextField()
+	
+    def __unicode__(self):
+	    return self.name
 		
 		
