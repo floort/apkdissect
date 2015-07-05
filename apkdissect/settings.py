@@ -21,16 +21,6 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
-DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'apkdb',
-		'USER': 'apkdissect',
-		'PASSWORD': 'apkdissectpassword',
-		'HOST': '',
-		'PORT': '', 
-	}
-}
 
 
 
