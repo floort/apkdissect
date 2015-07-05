@@ -7,19 +7,18 @@ of apk files.
 Installation
 ============
 
-Dependencies:
- * `adb` in your `$PATH`
- * `androguard`
- * `django`
- * `pygments`
-	
+For Ubuntu 15.04:
+ * `sudo apt-get install git python-pip python-django python-pygments android-tools-adb`
+ * `sudo pip install -e git+https://github.com/androguard/androguard.git#egg=androguard`
+ * `git clone https://github.com/floort/apkdissect.git`
+ * `cd apkdissect`
 Before running apkdissect on a new system, some changes should be made to `apkdissect/settings.py`:
  * `ADMINS` should be set to your name and email
  * `DATABASES` has a good default `sqlite3` database, but can be updated to use other databases.
  * `MEDIA_ROOT` should be set to the location of the `apkdissect/mediaroot` directory.
  * `SECRET_KEY` should be given a new random value
-
-On first use run `./manage.py syncdb` to create the database.
+ * `./manage.py syncdb`
+ 
 
 Importing APKs
 ==============
