@@ -21,6 +21,18 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
+DATABASES = {
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		'NAME': 'apkdb',
+		'USER': 'apkdissect',
+		'PASSWORD': 'apkdissectpassword',
+		'HOST': '',
+		'PORT': '', 
+	}
+}
+
+
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -112,7 +124,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/home/floort/devel/apkdissect/apk/templates/"
+    "/home/floort/devel/apkdissect/apk/templates/",
 )
 
 INSTALLED_APPS = (

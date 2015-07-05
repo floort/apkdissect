@@ -7,7 +7,11 @@ class Command(BaseCommand):
 	help = 'Decompile apks in the database'
 	
 	def handle(self, *args, **options):
-		for apk in APK.objects.filter(decompiled=False).order_by('-id'):
+		if not args:
+			apks = APK.objects.filter(decompiled=False).order_by('-id')
+		else:
+			apks = APK.objects.filter(id__in=args)
+		for apk in apks:
 			print apk.apk
 			try:
 				# clean all classes that should not be there
