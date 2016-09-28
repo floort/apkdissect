@@ -19,10 +19,11 @@ def get_connected_devices():
 	
 def list_packages(device=None):
 	if device == None:
-		out = check_output([ADB, 'shell', 'pm', 'list', 'packages', '-fui'])
+		out = check_output([ADB, 'shell', 'pm', 'list', 'packages', '-f'])
 	else:
-		out = check_output([ADB, '-s', device, 'shell', 'pm', 'list', 'packages', '-fui'])
+		out = check_output([ADB, '-s', device, 'shell', 'pm', 'list', 'packages', '-f'])
 	for line in out.split():
+		print line
 		label, rest = line.split(':')
 		path, name = rest.split('=')
 		yield [label, path, name]
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 		importbatch.save()
 		self.stdout.write('Importing from "%s"' % device)
 		for p in list_packages(deviceid):
-			out = check_output([ADB, 'shell', 'md5', p[1]])
+			out = check_output([ADB, 'shell', 'sha1sum', p[1]])
 			md5sum = out.split()[0].strip()
 			if len(md5sum) != 32:
 				print "Could not read", p[2]
