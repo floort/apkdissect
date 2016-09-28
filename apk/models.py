@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 
 import os
-from hashlib import md5, sha256
+from hashlib import sha1, sha256
 
 from pygments import highlight
 from pygments.lexers import JavaLexer
@@ -45,10 +45,10 @@ class DalvikClass(models.Model):
 
 def create_APK_from_file(filename, decompile=True):
     with open(filename) as f:
-        md5sum = md5(f.read()).hexdigest()
+        sha1sum = sha1(f.read()).hexdigest()
         f.seek(0,0)
         sha256sum = sha256(f.read()).hexdigest()
-        apk, created = APK.objects.get_or_create(md5=md5sum, sha256=sha256sum)
+        apk, created = APK.objects.get_or_create(sha1=sha1sum, sha256=sha256sum)
         if not created:
             print "Skiped duplicate"
             return apk
@@ -68,7 +68,7 @@ def create_APK_from_file(filename, decompile=True):
 class APK(models.Model):
     apk = models.FileField(upload_to="apks/")
     sha256 = models.CharField(max_length=64, db_index=True)
-    md5 = models.CharField(max_length=32, db_index=True)
+    sha1 = models.CharField(max_length=40, db_index=True)
     name = models.CharField(max_length=256, null=True)
     permissions = models.ManyToManyField(Permission)
     permissions_loaded = models.BooleanField(default=False)

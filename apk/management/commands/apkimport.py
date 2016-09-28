@@ -4,7 +4,7 @@ from subprocess import call, check_output
 from apk.models import *
 import os
 import sys
-from hashlib import md5, sha256
+from hashlib import sha1, sha256
 
 ADB = "adb"
 
@@ -41,11 +41,11 @@ class Command(BaseCommand):
 		self.stdout.write('Importing from "%s"' % device)
 		for p in list_packages(deviceid):
 			out = check_output([ADB, 'shell', 'sha1sum', p[1]])
-			md5sum = out.split()[0].strip()
-			if len(md5sum) != 32:
+			sha1sum = out.split()[0].strip()
+			if len(sha1sum) != 40:
 				print "Could not read", p[2]
 				continue
-			if len(APK.objects.filter(md5=md5sum).all()) > 0:
+			if len(APK.objects.filter(sha1=sha1sum).all()) > 0:
 				print "Skipping duplicate", p[2]
 				continue
 			tmpfile = os.path.join('/tmp/', p[2])
