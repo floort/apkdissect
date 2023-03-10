@@ -9,7 +9,7 @@ from pygments import highlight
 from pygments.lexers import JavaLexer
 from pygments.formatters import HtmlFormatter
 
-from analyze import get_classes, get_permissions, get_name
+#from analyze import get_classes, get_permissions, get_name
 
 # Create your models here.
 
@@ -26,7 +26,7 @@ class Permission(models.Model):
         
 class DalvikClass(models.Model):
     name = models.CharField(max_length=512)
-    apk = models.ForeignKey('APK')
+    apk = models.ForeignKey('APK', on_delete=models.CASCADE)
     javasource = models.TextField()
     
     def __unicode__(self):
@@ -44,24 +44,24 @@ class DalvikClass(models.Model):
 
 
 def create_APK_from_file(filename, decompile=True):
-    with open(filename) as f:
+    with open(filename, 'rb') as f:
         sha1sum = sha1(f.read()).hexdigest()
         f.seek(0,0)
         sha256sum = sha256(f.read()).hexdigest()
         apk, created = APK.objects.get_or_create(sha1=sha1sum, sha256=sha256sum)
         if not created:
-            print "Skiped duplicate"
+            print("Skiped duplicate")
             return apk
         f.seek(0,0)
         apk.apk.save(os.path.basename(filename), ContentFile(f.read()))
         apk.save()
     if decompile:
-	try:
-        	apk._load_name()
-        	apk._load_permissions()
-        	apk._load_classes()
-    	except:
-        	pass
+        try:
+            apk._load_name()
+            apk._load_permissions()
+            apk._load_classes()
+        except:
+            pass
     return apk
 
 
@@ -99,7 +99,8 @@ class APK(models.Model):
         self.save()
  	
     def _load_name(self):
-        self.name = get_name(os.path.join(settings.MEDIA_ROOT, self.apk.name))
+        self.name = ""
+        #self.name = get_name(os.path.join(settings.MEDIA_ROOT, self.apk.name))
         self.save()
     
     def _classify_bugs(self):
@@ -107,7 +108,7 @@ class APK(models.Model):
         tag, created = BugTag.objects.get_or_create(name="ALLOW_ALL_HOSTNAME_VERIFIER", defaults={
             "description": "Disabled certificate checks"
         })
-        print tag, created
+        print(tag, created)
         if len(self.dalvikclass_set.filter(javasource__contains='ALLOW_ALL_HOSTNAME_VERIFIER')) > 0:
             self.bug_tags.add(tag)
     def num_bug_tags(self):
@@ -124,7 +125,7 @@ class Device(models.Model):
         return self.identifier
 
 class ImportBatch(models.Model):
-	device = models.ForeignKey(Device)
+	device = models.ForeignKey(Device, on_delete=models.CASCADE)
 	timestamp = models.DateTimeField(auto_now=True)
 	
 	def __unicode__(self):
@@ -137,8 +138,8 @@ class ImportBatch(models.Model):
 class App(models.Model):
 	name = models.CharField(max_length=256)
 	location = models.CharField(max_length=256)
-	apk = models.ForeignKey(APK)
-	batch = models.ForeignKey(ImportBatch)
+	apk = models.ForeignKey(APK, on_delete=models.CASCADE)
+	batch = models.ForeignKey(ImportBatch, on_delete=models.CASCADE)
 	
 	def __unicode__(self):
 		return self.name

@@ -1,26 +1,21 @@
-from django.conf.urls import patterns, include, url
+"""apkdissect URL Configuration
 
-
-# Uncomment the next two lines to enable the admin:
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
 from django.contrib import admin
-admin.autodiscover()
+from django.urls import path
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'androidforensics.views.home', name='home'),
-    #url(r'^apk/', include('apk.urls')),
-    url(r'^$', 'apk.views.index', name='index'),
-    url(r'^apk/(?P<apk_id>\d+)/classes_menu.json$', 'apk.views.classes_menu_json', name='classes_menu_json'),
-    url(r'^apk/(?P<apk_id>\d+)/source.zip$', 'apk.views.classes_zip', name='classes_zip'),
-    url(r'^apk/menu.json$', 'apk.views.menu_json', name='menu_json'),
-    url(r'^$', 'apk.views.appindex', name='appindex'),
-    url(r'^showclass/(?P<class_id>\d+)$', 'apk.views.showclass', name='showclass'),
-    url(r'^showapk/(?P<apk_id>\d+)$', 'apk.views.showapk', name='showapk'),
-    url(r'^dissect/(?P<apk_id>\d+)$', 'apk.views.dissect', name='dissect'),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]
